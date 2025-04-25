@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>메모 관리 시스템 - 메모 수정/추가</title>
+    <title>메모 관리 시스템 - 메모 추가</title>
     <link rel="stylesheet" href="styles.css" />
     <style>
       .form-content {
@@ -95,6 +95,37 @@
         border-radius: 4px;
       }
     </style>
+    <script>
+      function displayInfo() {
+        const memoId = document.getElementById('memo-id').value;
+        const memoTitle = document.getElementById('memo-title').value;
+        const isImportant = document.getElementById('memo-important').checked;
+        const memoContent = document.getElementById('memo-content').value;
+        const memoColor = document.getElementById('memo-color').value;
+        const memoImageInput = document.getElementById('memo-image');
+        const memoDate = document.getElementById('memo-date').value;
+
+        const importantText = isImportant ? '중요' : '중요하지 않음';
+
+        let memoImageFileName =
+          memoImageInput.files.length > 0
+            ? memoImageInput.files[0].name
+            : '첨부 파일 없음';
+
+        const message =
+          `메모 번호: ${memoId}\n` +
+          `메모 제목: ${memoTitle}\n` +
+          `중요 여부: ${importantText}\n` +
+          `메모 내용: ${memoContent}\n` +
+          `메모 배경색: ${memoColor}\n` +
+          `첨부 그림 파일명: ${memoImageFileName}\n` +
+          `작성일: ${memoDate}`;
+
+        alert(message);
+
+        return false; // 현재 서버 없으므로 임시로 false
+      }
+    </script>
   </head>
   <body>
     <div class="container">
@@ -133,13 +164,18 @@
       <main class="main-content">
         <header class="main-header">
           <div class="header-container">
-            <h1 class="page-title">메모 수정</h1>
+            <h1 class="page-title">메모 추가</h1>
           </div>
         </header>
 
         <div class="form-content">
           <div class="form-container">
-            <form class="form">
+            <form
+              class="form"
+              action="#"
+              method="post"
+              onsubmit="return displayInfo()"
+            >
               <div class="form-group">
                 <label for="memo-id" class="form-label">메모 번호</label>
                 <input
@@ -153,12 +189,7 @@
 
               <div class="form-group">
                 <label for="memo-title" class="form-label">제목</label>
-                <input
-                  type="text"
-                  id="memo-title"
-                  class="form-input"
-                  value="회의 내용 정리"
-                />
+                <input type="text" id="memo-title" class="form-input" />
               </div>
 
               <div class="form-group">
@@ -168,19 +199,16 @@
                     type="checkbox"
                     id="memo-important"
                     class="form-checkbox"
-                    checked
                   />
-                  <label for="memo-important" class="checkbox-label"
-                    >중요</label
-                  >
+                  <label for="memo-important" class="checkbox-label">
+                    중요
+                  </label>
                 </div>
               </div>
 
               <div class="form-group">
                 <label for="memo-content" class="form-label">내용</label>
-                <textarea id="memo-content" class="form-textarea">
-1. 프로젝트 진행 상황 검토
-                </textarea>
+                <textarea id="memo-content" class="form-textarea"></textarea>
               </div>
 
               <div class="form-group">
