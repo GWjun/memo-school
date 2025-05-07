@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%
     request.setCharacterEncoding("UTF-8");
 
@@ -8,8 +8,6 @@
     String memoContent = request.getParameter("memo-content");
     String memoColor = request.getParameter("memo-color");
     String memoDate = request.getParameter("memo-date");
-
-    boolean importantChecked = (memoImportant != null);
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -28,7 +26,7 @@
       .form-container {
         max-width: 800px;
         margin: 0 auto;
-        background-color: white;
+        background-color: <%= memoColor %>;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         padding: 24px;
@@ -64,12 +62,6 @@
       .form-textarea {
         resize: vertical;
         min-height: 120px;
-      }
-
-      .form-actions {
-        display: flex;
-        gap: 16px;
-        margin: 16px auto 0 auto;
       }
 
       .checkbox-container {
@@ -200,8 +192,7 @@
                                 name="memo-content"
                                 class="form-textarea"
                                 disabled
-                        >
-                          <%= memoContent %>
+                        ><%= memoContent %>
                         </textarea>
                     </div>
 
