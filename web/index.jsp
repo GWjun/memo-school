@@ -5,9 +5,8 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>메모 관리 시스템</title>
-    <link rel="stylesheet" href="css/styles.css"/>
-    <link rel="stylesheet" href="css/memo-index.css"/>
-    <link rel="stylesheet" href="css/memo-card.css"/>
+    <link rel="stylesheet" href="css/common/styles.css"/>
+    <link rel="stylesheet" href="css/pages/index.css"/>
 </head>
 <body>
 <div class="container">
