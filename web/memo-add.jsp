@@ -1,28 +1,44 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="session-check.jsp" %> <%-- 인증 로직 --%>
-<%
-    request.setCharacterEncoding("UTF-8");
-
-    String memoId = request.getParameter("memo-id");
-    String memoTitle = request.getParameter("memo-title");
-    String memoImportant = request.getParameter("memo-important");
-    String memoContent = request.getParameter("memo-content");
-    String memoColor = request.getParameter("memo-color");
-    String memoDate = request.getParameter("memo-date");
-%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>메모 관리 시스템 - 메모 확인</title>
+    <title>메모 관리 시스템 - 메모 추가</title>
     <link rel="stylesheet" href="css/common/styles.css"/>
     <link rel="stylesheet" href="css/common/memo-form.css"/>
-    <style>
-      .form-container {
-        background-color: <%= memoColor %>;
+    <script>
+      function displayInfo() {
+        const memoId = document.getElementById('memo-id').value;
+        const memoTitle = document.getElementById('memo-title').value;
+        const isImportant = document.getElementById('memo-important').checked;
+        const memoContent = document.getElementById('memo-content').value;
+        const memoColor = document.getElementById('memo-color').value;
+        const memoImageInput = document.getElementById('memo-image');
+        const memoDate = document.getElementById('memo-date').value;
+
+        const importantText = isImportant ? '중요' : '중요하지 않음';
+
+        let memoImageFileName =
+            memoImageInput.files.length > 0
+                ? memoImageInput.files[0].name
+                : '첨부 파일 없음';
+
+        const message =
+            `메모 번호: ${memoId}\n` +
+            `메모 제목: ${memoTitle}\n` +
+            `중요 여부: ${importantText}\n` +
+            `메모 내용: ${memoContent}\n` +
+            `메모 배경색: ${memoColor}\n` +
+            `첨부 그림 파일명: ${memoImageFileName}\n` +
+            `작성일: ${memoDate}`;
+
+        alert(message);
+
+        return false; // 현재 서버 없으므로 임시로 false
       }
-    </style>
+    </script>
 </head>
 <body>
 <div class="container">
@@ -61,21 +77,26 @@
     <main class="main-content">
         <header class="main-header">
             <div class="header-container">
-                <h1 class="page-title">메모 확인</h1>
+                <h1 class="page-title">메모 추가</h1>
             </div>
         </header>
 
         <div class="form-content">
             <div class="form-container">
-                <div class="form">
+                <form
+                        class="form"
+                        action="memo-result.jsp"
+                        method="post"
+                >
                     <div class="form-group">
                         <label for="memo-id" class="form-label">메모 번호</label>
                         <input
                                 type="text"
                                 id="memo-id"
+                                name="memo-id"
                                 class="form-input"
-                                value="<%= memoId %>"
-                                disabled
+                                value="001"
+                                readonly
                         />
                     </div>
 
@@ -86,8 +107,6 @@
                                 id="memo-title"
                                 name="memo-title"
                                 class="form-input"
-                                value="<%= memoTitle %>"
-                                disabled
                         />
                     </div>
 
@@ -99,8 +118,6 @@
                                     id="memo-important"
                                     name="memo-important"
                                     class="form-checkbox"
-                                    <%= memoImportant != null ? "checked" : "" %>
-                                    disabled
                             />
                             <label for="memo-important" class="checkbox-label">
                                 중요
@@ -114,9 +131,7 @@
                                 id="memo-content"
                                 name="memo-content"
                                 class="form-textarea"
-                                disabled
-                        ><%= memoContent %>
-                        </textarea>
+                        ></textarea>
                     </div>
 
                     <div class="form-group">
@@ -126,8 +141,7 @@
                                 id="memo-color"
                                 name="memo-color"
                                 class="form-color"
-                                value="<%= memoColor %>"
-                                disabled
+                                value="#ffffff"
                         />
                     </div>
 
@@ -139,7 +153,6 @@
                                     id="memo-image"
                                     class="file-input"
                                     accept="image/*"
-                                    disabled
                             />
                             <label for="memo-image" class="file-input-label">
                                 이미지 첨부
@@ -152,12 +165,18 @@
                         <input
                                 type="text"
                                 id="memo-date"
+                                name="memo-date"
                                 class="form-input"
-                                value="<%= memoDate %>"
-                                disabled
+                                value="2024-02-15"
+                                readonly
                         />
                     </div>
-                </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn primary">저장</button>
+                        <button type="button" class="btn secondary">취소</button>
+                    </div>
+                </form>
             </div>
         </div>
     </main>

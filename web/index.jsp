@@ -1,4 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="session-check.jsp" %> <%-- 인증 로직 --%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -47,11 +48,16 @@
             <div class="header-container">
                 <h1 class="page-title">업무</h1>
                 <div class="header-actions">
-                    <input type="text" class="search-input" placeholder="메모 검색"/>
+                    <div class="header-right">
+                        <input type="text" class="search-input" placeholder="메모 검색"/>
 
-                    <a href="memo-add.html" style="text-decoration: none">
-                        <button class="btn primary">+ 새 메모</button>
+                    </div>
+
+                    <a href="memo-add.jsp" style="text-decoration: none">
+                        <button class="btn primary">새 메모</button>
                     </a>
+                    <a href="logout.jsp" class="btn secondary"
+                       style="text-decoration: none">로그아웃</a>
                 </div>
             </div>
         </header>

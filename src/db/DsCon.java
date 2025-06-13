@@ -14,7 +14,7 @@ public class DsCon {
    */
   public static Connection getConnection() throws NamingException, SQLException {
     Context initContext = new InitialContext();
-    DataSource ds = (DataSource) initContext.lookup("java:/comp/env/jdbc/mydbTest");
+    DataSource ds = (DataSource) initContext.lookup("java:/comp/env/jdbc/memodb");
     return ds.getConnection();
   }
 }
