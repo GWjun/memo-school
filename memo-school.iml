@@ -22,7 +22,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar:///Applications/apache-tomcat-11.0.6/lib/jsp-api.jar!/" />
+          <root url="jar://$USER_HOME$/Downloads/apache-tomcat-11.0.8/lib/jsp-api.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -31,7 +31,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar:///Applications/apache-tomcat-11.0.6/lib/servlet-api.jar!/" />
+          <root url="jar://$USER_HOME$/Downloads/apache-tomcat-11.0.8/lib/servlet-api.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

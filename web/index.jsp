@@ -5,81 +5,9 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>메모 관리 시스템</title>
-    <link rel="stylesheet" href="styles.css"/>
-    <style>
-      .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-      }
-
-      .search-input {
-        width: 360px;
-        padding: 8px 16px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        outline: none;
-      }
-
-      .memo-content {
-        flex: 1;
-        overflow: auto;
-        padding: 24px;
-      }
-
-      .memo-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 24px;
-      }
-
-      .memo-card {
-        border-radius: 8px;
-        padding: 16px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      }
-
-      .memo-card.yellow {
-        background-color: #fff9e6;
-      }
-
-      .memo-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 12px;
-      }
-
-      .memo-title {
-        margin: 0;
-        font-size: 16px;
-        font-weight: 500;
-      }
-
-      .starred {
-        color: #ffc107;
-      }
-
-      .memo-text {
-        color: #666;
-        font-size: 14px;
-        margin-bottom: 16px;
-        overflow: hidden;
-      }
-
-      .memo-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 12px;
-        color: #777;
-      }
-
-      .memo-actions {
-        display: flex;
-        gap: 8px;
-      }
-    </style>
+    <link rel="stylesheet" href="css/styles.css"/>
+    <link rel="stylesheet" href="css/memo-index.css"/>
+    <link rel="stylesheet" href="css/memo-card.css"/>
 </head>
 <body>
 <div class="container">
