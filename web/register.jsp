@@ -52,11 +52,11 @@
             <input class="form-input" type="text" id="nickname" name="nickname" required>
         </div>
 
-        <button type="submit" class="btn-register">회원가입</button>
+        <button type="submit" class="btn primary">회원가입</button>
     </form>
 
     <div class="login-link">
-        <p>이미 계정이 있으신가요? <a href="login.jsp" style="text-decoration: none">로그인</a></p>
+        <a href="login.jsp" style="text-decoration: none; color: gray">로그인</a>
     </div>
 </div>
 </body>

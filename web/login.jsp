@@ -39,13 +39,12 @@
             <input class="form-input" type="password" id="password" name="password" required>
         </div>
 
-        <button type="submit" class="btn-login">로그인</button>
+        <button type="submit" class="btn primary">로그인</button>
     </form>
 
     <div class="register-link">
-        <p>계정이 없으신가요? <a href="register.jsp" style="text-decoration: none">회원가입</a></p>
+        <a href="register.jsp" style="text-decoration: none; color: gray">회원가입</a>
     </div>
 </div>
 </body>
 </html>
-
