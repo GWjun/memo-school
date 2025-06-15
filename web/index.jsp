@@ -164,14 +164,13 @@
                     <% } %>
                 </h1>
                 <div class="header-actions">
-                    <div class="header-right">
-                        <form action="index.jsp" method="get" class="search-container">
-                            <input type="text" class="search-input" name="keyword"
-                                   placeholder="메모 검색"
-                                   value="<%= keyword != null ? keyword : "" %>"/>
-                            <button type="submit" class="btn secondary">검색</button>
-                        </form>
-                    </div>
+                    <form action="index.jsp" method="get" class="search-container">
+                        <input type="text" class="search-input" name="keyword"
+                               placeholder="메모 검색"
+                               value="<%= keyword != null ? keyword : "" %>"/>
+                        <button type="submit" class="btn secondary">검색</button>
+                    </form>
+
 
                     <a href="memo-add.jsp<%= activeCategory != null ? "?categoryId=" + activeCategory.getCategoryId() : "" %>"
                        style="text-decoration: none">
