@@ -1,4 +1,4 @@
-package myBean.db;
+package src.db;
 
 import java.sql.*;
 import javax.naming.*;

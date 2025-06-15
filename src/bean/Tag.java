@@ -1,4 +1,4 @@
-package myBean.bean;
+package src.bean;
 
 // 태그 테이블
 public class Tag {

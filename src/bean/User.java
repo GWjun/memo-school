@@ -1,4 +1,4 @@
-package myBean.bean;
+package src.bean;
 
 import java.sql.Timestamp;
 

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="myBean.db.UserDB" %>
-<%@ page import="myBean.bean.User" %>
+<%@ page import="src.db.UserDB" %>
+<%@ page import="src.bean.User" %>
 <%@ page import="javax.naming.NamingException" %>
 <%@ page import="java.sql.*" %>
 
@@ -63,7 +63,6 @@
             userDB.close();
         }
     } catch (SQLException | NamingException e) {
-        e.printStackTrace();
         response.sendRedirect("register.jsp?error=else");
     }
 %>

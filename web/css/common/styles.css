@@ -111,18 +111,8 @@ body {
 }
 
 .btn.primary {
-  width: 100%;
-  padding: 8px 12px;
   background-color: #000000;
   color: white;
-  font-size: 16px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-}
-
-.btn.primary:hover {
-  background-color: #333333;
 }
 
 .btn.secondary {

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="myBean.db.UserDB" %>
-<%@ page import="myBean.bean.User" %>
+<%@ page import="src.db.UserDB" %>
+<%@ page import="src.bean.User" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="javax.naming.NamingException" %>
 

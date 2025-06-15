@@ -1,6 +1,6 @@
-package myBean.db;
+package src.db;
 
-import myBean.bean.Category;
+import src.bean.Category;
 import java.sql.*;
 import javax.naming.NamingException;
 import java.util.ArrayList;
