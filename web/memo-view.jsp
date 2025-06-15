@@ -1,18 +1,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="session-check.jsp" %> <%-- 인증 로직 --%>
 <%@ page import="src.bean.Memo, src.db.MemoDB, java.text.SimpleDateFormat" %>
+<%@ page import="src.bean.Tag, src.db.TagDB, java.util.List" %>
 <%
     // 메모 ID 파라미터 가져오기
     String memoIdStr = request.getParameter("memoId");
     int memoId = 0;
     Memo memo = null;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    List<Tag> memoTags = null;
 
     try {
         memoId = Integer.parseInt(memoIdStr);
 
         // 메모 정보 가져오기
         MemoDB memoDB = null;
+        TagDB tagDB = null;
 
         memoDB = new MemoDB();
         memo = memoDB.getMemoById(memoId, userId);
@@ -23,7 +26,12 @@
             return;
         }
 
+        // 메모의 태그 목록 가져오기
+        tagDB = new TagDB();
+        memoTags = tagDB.getTagsByMemoId(memoId);
+
         memoDB.close();
+        tagDB.close();
     } catch (Exception e) {
         out.print(e);
         response.sendRedirect("index.jsp");
@@ -41,6 +49,7 @@
     <title><%= memo.getTitle() %> - 메모 보기</title>
     <link rel="stylesheet" href="css/common/styles.css">
     <link rel="stylesheet" href="css/common/memo-form.css">
+    <link rel="stylesheet" href="css/common/tag.css">
     <link rel="stylesheet" href="css/pages/memo-view.css">
 </head>
 <body>
@@ -61,6 +70,15 @@
     <% if (memo.getImageUrl() != null && !memo.getImageUrl().isEmpty()) { %>
     <div>
         <img src="<%= memo.getImageUrl() %>" alt="메모 이미지" class="memo-image">
+    </div>
+    <% } %>
+
+    <% if (memoTags != null && !memoTags.isEmpty()) { %>
+    <div class="tag-container">
+        <% for (Tag tag : memoTags) { %>
+        <a href="index.jsp?tag=<%= tag.getTagName() %>" class="tag">#<%= tag.getTagName() %>
+        </a>
+        <% } %>
     </div>
     <% } %>
 

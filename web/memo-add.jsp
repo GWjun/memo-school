@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="session-check.jsp" %>
-<%@ page import="src.bean.Category, src.db.CategoryDB, java.util.List" %>
+<%@ page
+        import="src.bean.Category, src.db.CategoryDB, java.util.List" %>
 <%
     // 카테고리 기본값 설정
     String categoryIdParam = request.getParameter("categoryId");
@@ -8,6 +9,7 @@
 
     // 카테고리 목록 가져오기
     List<Category> categories = null;
+
     try {
         CategoryDB categoryDB = new CategoryDB();
         categories = categoryDB.getCategoriesByUserId(userId);
@@ -30,6 +32,7 @@
     <title>새 메모 등록</title>
     <link rel="stylesheet" href="css/common/styles.css">
     <link rel="stylesheet" href="css/common/memo-form.css">
+    <link rel="stylesheet" href="css/common/tag.css">
     <link rel="stylesheet" href="css/pages/memo-form.css">
 </head>
 <body>
@@ -82,6 +85,12 @@
         <div class="form-group">
             <label for="imageFile">이미지 첨부 (선택사항)</label>
             <input type="file" id="imageFile" name="imageFile" accept="image/*">
+        </div>
+
+        <div class="form-group">
+            <label for="tags">태그 (쉼표로 구분)</label>
+            <input type="text" id="tags" name="tags" placeholder="예: 중요, 회의, 아이디어">
+            <p class="tag-help">여러 개의 태그는 쉼표(,)로 구분하여 입력하세요.</p>
         </div>
 
         <div class="button-group">

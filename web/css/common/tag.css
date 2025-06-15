@@ -1,0 +1,54 @@
+/* 태그 관련 공통 스타일 */
+
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.tag {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  padding: 3px 10px;
+  font-size: 0.85rem;
+  display: inline-block;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.2s;
+}
+
+.tag:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.active-tag {
+  background-color: #4CAF50;
+  color: white;
+  padding: 3px 12px;
+  border-radius: 15px;
+  margin-left: 10px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+}
+
+.clear-tag-btn {
+  margin-left: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+}
+
+.clear-tag-btn:hover {
+  color: #e0e0e0;
+}
+
+/* 태그 입력 필드 스타일 */
+.tag-help {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 4px;
+}

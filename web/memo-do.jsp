@@ -2,15 +2,37 @@
 <%@ include file="session-check.jsp" %> <%-- 인증 로직 --%>
 <%@ page import="src.bean.Memo, src.db.MemoDB, java.io.File" %>
 <%@ page import="src.multipart.MultiPart, src.bean.MyPart" %>
+<%@ page import="src.db.TagDB, src.bean.Tag" %>
+
+<%!
+    // 태그 처리를 위한 메서드
+    private void processTags(String tagsStr, int memoId, TagDB tagDB) throws Exception {
+        String[] tagArray = tagsStr.split(",");
+        for (String tagName : tagArray) {
+            tagName = tagName.trim();
+            if (!tagName.isEmpty()) {
+                Tag tag = new Tag();
+                tag.setTagName(tagName);
+                int tagId = tagDB.insertTag(tag);
+                if (tagId > 0) {
+                    tagDB.addTagToMemo(memoId, tagId);
+                }
+            }
+        }
+    }
+%>
+
 <%
     request.setCharacterEncoding("UTF-8");
     String action = request.getParameter("action");
     String resultMessage = "";
     String uploadedFilePath = null;
     MemoDB memoDB = null;
+    TagDB tagDB = null;
 
     try {
         memoDB = new MemoDB();
+        tagDB = new TagDB();
 
         // 요청 타입 확인
         boolean isMultipart = request.getContentType() != null &&
@@ -36,6 +58,7 @@
             String importantValue = request.getParameter("important");
             String memoIdStr = request.getParameter("memoId");
             String removeImageValue = request.getParameter("removeImage");
+            String tagsStr = request.getParameter("tags"); // 태그 문자열 가져오기
             int categoryId = Integer.parseInt(categoryIdStr);
 
             // 업로드된 이미지 처리
@@ -59,6 +82,11 @@
 
                 int newMemoId = memoDB.insertMemo(memo);
                 if (newMemoId > 0) {
+                    // 태그 처리
+                    if (tagsStr != null && !tagsStr.trim().isEmpty()) {
+                        processTags(tagsStr, newMemoId, tagDB);
+                    }
+
                     response.sendRedirect("memo-view.jsp?memoId=" + newMemoId);
                     return;
                 } else {
@@ -85,6 +113,12 @@
                     }
 
                     if (memoDB.updateMemo(memo)) {
+                        // 태그 처리 - 기존 태그를 모두 삭제하고 새로운 태그 추가
+                        tagDB.removeAllTagsFromMemo(memoId);
+                        if (tagsStr != null && !tagsStr.trim().isEmpty()) {
+                            processTags(tagsStr, memoId, tagDB);
+                        }
+
                         response.sendRedirect("memo-view.jsp?memoId=" + memoId);
                         return;
                     } else {
@@ -113,6 +147,9 @@
                         }
                     }
 
+                    // 메모와 관련된 모든 태그 연결 삭제
+                    tagDB.removeAllTagsFromMemo(memoId);
+
                     // 메모 삭제 및 리다이렉트
                     if (memoDB.deleteMemo(memoId, userId)) {
                         response.sendRedirect("index.jsp?categoryId=" + memo.getCategoryId());
@@ -131,7 +168,15 @@
         }
     } catch (Exception e) {
         resultMessage = "오류가 발생했습니다: " + e.getMessage();
+        e.printStackTrace();
     } finally {
+        if (tagDB != null) {
+            try {
+                tagDB.close();
+            } catch (Exception e) {
+                // 연결 닫기 오류는 무시
+            }
+        }
         if (memoDB != null) {
             try {
                 memoDB.close();

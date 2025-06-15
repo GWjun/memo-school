@@ -179,4 +179,59 @@ public class MemoDB {
     }
     return memos;
   }
+
+  // 메모 ID 목록으로 메모 조회
+  public List<Memo> getMemosByIds(List<Integer> memoIds, int userId) throws SQLException {
+    List<Memo> memos = new ArrayList<>();
+
+    if (memoIds == null || memoIds.isEmpty()) {
+      return memos;
+    }
+
+    // memoIds 목록을 IN 절에 사용하기 위한 쉼표로 구분된 물음표 생성
+    StringBuilder placeholders = new StringBuilder();
+    for (int i = 0; i < memoIds.size(); i++) {
+      if (i > 0) {
+        placeholders.append(", ");
+      }
+      placeholders.append("?");
+    }
+
+    String sql = "SELECT m.*, c.category_name " +
+        "FROM memos m " +
+        "LEFT JOIN categories c ON m.category_id = c.category_id " +
+        "WHERE m.memo_id IN (" + placeholders.toString() + ") " +
+        "AND m.user_id = ? " +
+        "ORDER BY m.is_important DESC, m.created_at DESC";
+
+    pstmt = con.prepareStatement(sql);
+
+    // 물음표에 메모 ID 값 설정
+    int paramIndex = 1;
+    for (Integer memoId : memoIds) {
+      pstmt.setInt(paramIndex++, memoId);
+    }
+
+    // 마지막 물음표는 userId
+    pstmt.setInt(paramIndex, userId);
+
+    rs = pstmt.executeQuery();
+    while (rs.next()) {
+      Memo memo = new Memo();
+      memo.setMemoId(rs.getInt("memo_id"));
+      memo.setUserId(rs.getInt("user_id"));
+      memo.setCategoryId(rs.getInt("category_id"));
+      memo.setTitle(rs.getString("title"));
+      memo.setContent(rs.getString("content"));
+      memo.setImportant(rs.getBoolean("is_important"));
+      memo.setBackgroundColor(rs.getString("background_color"));
+      memo.setImageUrl(rs.getString("image_url"));
+      memo.setCategoryName(rs.getString("category_name"));
+      memo.setCreatedAt(rs.getTimestamp("created_at"));
+      memo.setUpdatedAt(rs.getTimestamp("updated_at"));
+      memos.add(memo);
+    }
+
+    return memos;
+  }
 }

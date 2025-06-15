@@ -1,12 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="session-check.jsp" %> <%-- 인증 로직 --%>
 <%@ page
-        import="src.bean.Category, src.bean.Memo, src.db.CategoryDB, src.db.MemoDB, java.util.List" %>
+        import="src.bean.Category, src.bean.Memo, src.bean.Tag, src.db.CategoryDB, src.db.MemoDB, src.db.TagDB, java.util.List" %>
 <%
     // 메모 ID 파라미터 가져오기
     String memoIdStr = request.getParameter("memoId");
     int memoId = 0;
     Memo memo = null;
+    List<Tag> memoTags = null; // 메모의 태그 목록
 
     try {
         memoId = Integer.parseInt(memoIdStr);
@@ -24,6 +25,11 @@
             }
 
             memoDB.close();
+
+            // 메모의 태그 목록 가져오기
+            TagDB tagDB = new TagDB();
+            memoTags = tagDB.getTagsByMemoId(memoId);
+            tagDB.close();
         } catch (Exception e) {
             out.print(e);
             response.sendRedirect("index.jsp");
@@ -42,6 +48,17 @@
         categoryDB.close();
     } catch (Exception e) {
         out.print(e);
+    }
+
+    // 기존 태그들을 쉼표로 구분된 문자열로 변환
+    StringBuilder tagString = new StringBuilder();
+    if (memoTags != null && !memoTags.isEmpty()) {
+        for (int i = 0; i < memoTags.size(); i++) {
+            tagString.append(memoTags.get(i).getTagName());
+            if (i < memoTags.size() - 1) {
+                tagString.append(", ");
+            }
+        }
     }
 %>
 <!DOCTYPE html>
@@ -119,6 +136,13 @@
 
             <input type="file" id="imageFile" name="imageFile" accept="image/*">
             <p>새 이미지를 선택하면 기존 이미지가 교체됩니다.</p>
+        </div>
+
+        <div class="form-group">
+            <label for="tags">태그 (쉼표로 구분)</label>
+            <input type="text" id="tags" name="tags" placeholder="예: 중요, 회의, 아이디어"
+                   value="<%= tagString.toString() %>">
+            <p class="tag-help">여러 개의 태그는 쉼표(,)로 구분하여 입력하세요.</p>
         </div>
 
         <div class="button-group">

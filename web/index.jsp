@@ -1,10 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="session-check.jsp" %> <%-- 인증 로직 --%>
 <%@ page
-        import="src.bean.Category, src.bean.Memo, src.db.CategoryDB, src.db.MemoDB, java.util.List, java.text.SimpleDateFormat" %>
+        import="src.bean.*, src.db.CategoryDB, src.db.MemoDB, src.db.TagDB, java.util.*, java.text.SimpleDateFormat" %>
 <%
     // 검색 파라미터 가져오기
     String keyword = request.getParameter("keyword");
+
+    // 태그 필터링 파라미터 가져오기
+    String tagFilter = request.getParameter("tag");
 
     // 카테고리 ID 가져오기
     String categoryIdParam = request.getParameter("categoryId");
@@ -51,18 +54,43 @@
     // 메모 목록 가져오기
     List<Memo> memos = null;
     MemoDB memoDB = null;
+    TagDB tagDB = null;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    // 메모 ID와 태그 목록을 매핑하는 맵
+    HashMap<Integer, List<Tag>> memoTagsMap = new HashMap<>();
 
     try {
         memoDB = new MemoDB();
+        tagDB = new TagDB();
 
+        // 태그 필터가 있으면 태그로 메모 검색
+        if (tagFilter != null && !tagFilter.trim().isEmpty()) {
+            // 태그로 메모 ID 목록 가져오기
+            List<Integer> memoIds = tagDB.getMemoIdsByTagName(tagFilter);
+            if (memoIds != null && !memoIds.isEmpty()) {
+                memos = memoDB.getMemosByIds(memoIds, Integer.valueOf(userId));
+            } else {
+                memos = new ArrayList<>(); // 빈 목록 반환
+            }
+        }
         // 검색어가 있으면 검색 결과를, 없으면 선택된 카테고리의 메모 목록을 가져옴
-        if (keyword != null && !keyword.trim().isEmpty()) {
+        else if (keyword != null && !keyword.trim().isEmpty()) {
             memos = memoDB.searchMemos(userId, keyword);
         } else if (selectedCategoryId > 0) {
             memos = memoDB.getMemosByCategory(selectedCategoryId, userId);
         }
 
+        // 각 메모의 태그 목록 가져오기
+        if (memos != null && !memos.isEmpty()) {
+            for (Memo memo : memos) {
+                List<Tag> tags = tagDB.getTagsByMemoId(memo.getMemoId());
+                memoTagsMap.put(memo.getMemoId(), tags);
+            }
+        }
+
+        if (tagDB != null) {
+            tagDB.close();
+        }
         memoDB.close();
     } catch (Exception e) {
         out.print(e);
@@ -75,6 +103,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>메모 관리 시스템</title>
     <link rel="stylesheet" href="css/common/styles.css"/>
+    <link rel="stylesheet" href="css/common/tag.css"/>
     <link rel="stylesheet" href="css/pages/index.css"/>
 </head>
 <body>
@@ -122,7 +151,11 @@
         <header class="main-header">
             <div class="header-container">
                 <h1 class="page-title">
-                    <% if (keyword != null && !keyword.trim().isEmpty()) { %>
+                    <% if (tagFilter != null && !tagFilter.trim().isEmpty()) { %>
+                    태그: #<%= tagFilter %>
+                    <a href="index.jsp<%= activeCategory != null ? "?categoryId=" + activeCategory.getCategoryId() : "" %>"
+                       class="clear-tag-btn">×</a>
+                    <% } else if (keyword != null && !keyword.trim().isEmpty()) { %>
                     "<%= keyword %>" 검색 결과
                     <% } else if (activeCategory != null) { %>
                     <%= activeCategory.getCategoryName() %>
@@ -166,6 +199,20 @@
                     </div>
                     <p class="memo-text"><%= memo.getContent() %>
                     </p>
+
+                    <%
+                        List<Tag> tags = memoTagsMap.get(memo.getMemoId());
+                        if (tags != null && !tags.isEmpty()) {
+                    %>
+                    <div class="tag-container" onclick="event.stopPropagation();">
+                        <% for (Tag tag : tags) { %>
+                        <a href="index.jsp?tag=<%= tag.getTagName() %>"
+                           class="tag">#<%= tag.getTagName() %>
+                        </a>
+                        <% } %>
+                    </div>
+                    <% } %>
+
                     <div class="memo-footer">
                         <span class="memo-date"><%= dateFormat.format(memo.getCreatedAt()) %></span>
                         <div class="memo-actions" onclick="event.stopPropagation();">
@@ -178,7 +225,11 @@
                     </div>
                 </div>
                 <% }
-                } %>
+                } else { %>
+                <div class="no-memo-message">
+                    <p>등록된 메모가 없습니다.</p>
+                </div>
+                <% } %>
             </div>
         </div>
     </main>
