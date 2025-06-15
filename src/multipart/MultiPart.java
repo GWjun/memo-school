@@ -41,13 +41,4 @@ public class MultiPart {
   public MyPart getMyPart(String paramName) {
     return fileMap.get(paramName);
   }
-
-  public String getSavedFileName(String paramName) {
-    return fileMap.get(paramName).getSavedFileName();
-  }
-
-  // HashMap에서 file type name 파라미터 값을 key로하는 value값(MyPart)을 알아낸 후, 변경전 파일명 반환
-  public String getOriginalFileName(String paramName) {
-    return this.getMyPart(paramName).getPart().getSubmittedFileName();
-  }
 }

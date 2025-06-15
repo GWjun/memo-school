@@ -58,7 +58,7 @@
             String importantValue = request.getParameter("important");
             String memoIdStr = request.getParameter("memoId");
             String removeImageValue = request.getParameter("removeImage");
-            String tagsStr = request.getParameter("tags"); // 태그 문자열 가져오기
+            String tagsStr = request.getParameter("tags");
             int categoryId = Integer.parseInt(categoryIdStr);
 
             // 업로드된 이미지 처리
@@ -166,24 +166,12 @@
         } else {
             resultMessage = "지원하지 않는 요청입니다.";
         }
+
+        tagDB.close();
+        memoDB.close();
     } catch (Exception e) {
         resultMessage = "오류가 발생했습니다: " + e.getMessage();
-        e.printStackTrace();
-    } finally {
-        if (tagDB != null) {
-            try {
-                tagDB.close();
-            } catch (Exception e) {
-                // 연결 닫기 오류는 무시
-            }
-        }
-        if (memoDB != null) {
-            try {
-                memoDB.close();
-            } catch (Exception e) {
-                // 연결 닫기 오류는 무시
-            }
-        }
+        out.print(e);
     }
 %>
 <!DOCTYPE html>

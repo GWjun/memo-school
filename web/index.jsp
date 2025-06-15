@@ -3,21 +3,18 @@
 <%@ page
         import="src.bean.*, src.db.CategoryDB, src.db.MemoDB, src.db.TagDB, java.util.*, java.text.SimpleDateFormat" %>
 <%
-    // 검색 파라미터 가져오기
+    // 파라미터 가져오기
     String keyword = request.getParameter("keyword");
-
-    // 태그 필터링 파라미터 가져오기
     String tagFilter = request.getParameter("tag");
-
-    // 카테고리 ID 가져오기
     String categoryIdParam = request.getParameter("categoryId");
+
     int selectedCategoryId = 0;
 
     if (categoryIdParam != null && !categoryIdParam.isEmpty()) {
         try {
             selectedCategoryId = Integer.parseInt(categoryIdParam);
         } catch (NumberFormatException e) {
-            // 숫자 형식이 아닌 경우 무시
+            // 무시
         }
     }
 
@@ -35,7 +32,7 @@
     // 활성 카테고리 결정
     Category activeCategory = null;
 
-    // 선택된 카테고리 ID가 있으면 해당 카테고리를 활성화
+    // 선택된 카테고리 활성화
     if (selectedCategoryId > 0 && categories != null) {
         for (Category category : categories) {
             if (category.getCategoryId() == selectedCategoryId) {
@@ -45,7 +42,7 @@
         }
     }
 
-    // 선택된 카테고리가 없고, 카테고리가 존재하면 첫 번째 카테고리를 활성화
+    // 선택된 카테고리가 없으면 첫 번째 카테고리를 활성화
     if (activeCategory == null && categories != null && !categories.isEmpty()) {
         activeCategory = categories.get(0);
         selectedCategoryId = activeCategory.getCategoryId();
@@ -56,31 +53,27 @@
     MemoDB memoDB = null;
     TagDB tagDB = null;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    // 메모 ID와 태그 목록을 매핑하는 맵
     HashMap<Integer, List<Tag>> memoTagsMap = new HashMap<>();
 
     try {
         memoDB = new MemoDB();
         tagDB = new TagDB();
 
-        // 태그 필터가 있으면 태그로 메모 검색
+        // 태그로 메모 검색
         if (tagFilter != null && !tagFilter.trim().isEmpty()) {
-            // 태그로 메모 ID 목록 가져오기
             List<Integer> memoIds = tagDB.getMemoIdsByTagName(tagFilter);
             if (memoIds != null && !memoIds.isEmpty()) {
                 memos = memoDB.getMemosByIds(memoIds, Integer.valueOf(userId));
             } else {
-                memos = new ArrayList<>(); // 빈 목록 반환
+                memos = new ArrayList<>();
             }
-        }
-        // 검색어가 있으면 검색 결과를, 없으면 선택된 카테고리의 메모 목록을 가져옴
-        else if (keyword != null && !keyword.trim().isEmpty()) {
-            memos = memoDB.searchMemos(userId, keyword);
+        } else if (keyword != null && !keyword.trim().isEmpty()) {
+            memos = memoDB.searchMemos(userId, keyword); // 키워드로 메모 검색
         } else if (selectedCategoryId > 0) {
-            memos = memoDB.getMemosByCategory(selectedCategoryId, userId);
+            memos = memoDB.getMemosByCategory(selectedCategoryId, userId); // 선택된 카테고리의 메모 목록 가져오기
         }
 
-        // 각 메모의 태그 목록 가져오기
+        // 태그 목록 가져오기
         if (memos != null && !memos.isEmpty()) {
             for (Memo memo : memos) {
                 List<Tag> tags = tagDB.getTagsByMemoId(memo.getMemoId());
@@ -88,10 +81,8 @@
             }
         }
 
-        if (tagDB != null) {
-            tagDB.close();
-        }
         memoDB.close();
+        tagDB.close();
     } catch (Exception e) {
         out.print(e);
     }

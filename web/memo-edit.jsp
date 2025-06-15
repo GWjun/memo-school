@@ -7,35 +7,29 @@
     String memoIdStr = request.getParameter("memoId");
     int memoId = 0;
     Memo memo = null;
-    List<Tag> memoTags = null; // 메모의 태그 목록
+    List<Tag> memoTags = null;
 
+    // 메모 정보 가져오기
     try {
-        memoId = Integer.parseInt(memoIdStr);
-
-        // 메모 정보 가져오기
         MemoDB memoDB = null;
-        try {
-            memoDB = new MemoDB();
-            memo = memoDB.getMemoById(memoId, userId);
+        memoDB = new MemoDB();
+        memoId = Integer.parseInt(memoIdStr);
+        memo = memoDB.getMemoById(memoId, userId);
 
-            // 권한 확인
-            if (memo == null || memo.getUserId() != userId) {
-                response.sendRedirect("index.jsp");
-                return;
-            }
-
-            memoDB.close();
-
-            // 메모의 태그 목록 가져오기
-            TagDB tagDB = new TagDB();
-            memoTags = tagDB.getTagsByMemoId(memoId);
-            tagDB.close();
-        } catch (Exception e) {
-            out.print(e);
+        // 권한 확인
+        if (memo == null || memo.getUserId() != userId) {
             response.sendRedirect("index.jsp");
             return;
         }
-    } catch (NumberFormatException e) {
+
+        memoDB.close();
+
+        // 메모의 태그 목록 가져오기
+        TagDB tagDB = new TagDB();
+        memoTags = tagDB.getTagsByMemoId(memoId);
+        tagDB.close();
+    } catch (Exception e) {
+        out.print(e);
         response.sendRedirect("index.jsp");
         return;
     }
@@ -50,7 +44,7 @@
         out.print(e);
     }
 
-    // 기존 태그들을 쉼표로 구분된 문자열로 변환
+    // 태그들을 쉼표로 구분된 문자열로 변환
     StringBuilder tagString = new StringBuilder();
     if (memoTags != null && !memoTags.isEmpty()) {
         for (int i = 0; i < memoTags.size(); i++) {
