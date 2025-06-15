@@ -79,3 +79,64 @@
   display: flex;
   gap: 8px;
 }
+
+.memo-card {
+  position: relative;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+  transition: transform 0.2s ease;
+}
+
+.memo-card:hover {
+  transform: translateY(-3px);
+}
+
+.memo-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.memo-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.memo-text {
+  margin: 0 0 16px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.memo-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #666;
+  font-size: 14px;
+}
+
+.memo-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.starred {
+  color: #FFD700;
+}
+
+.search-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.search-container select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}

@@ -146,36 +146,20 @@ public class MemoDB {
   }
 
   // 메모 검색 기능
-  public List<Memo> searchMemos(int userId, String keyword, String searchType) throws SQLException {
+  public List<Memo> searchMemos(int userId, String keyword) throws SQLException {
     List<Memo> memos = new ArrayList<>();
-
-    String whereClause;
-
-    if (searchType.equals("title")) {
-      whereClause = "m.title LIKE ?";
-    } else if (searchType.equals("content")) {
-      whereClause = "m.content LIKE ?";
-    } else {
-      // 제목과 내용 모두 검색
-      whereClause = "(m.title LIKE ? OR m.content LIKE ?)";
-    }
 
     String sql = "SELECT m.*, c.category_name FROM memos m " +
         "INNER JOIN categories c ON m.category_id = c.category_id " +
-        "WHERE m.user_id = ? AND " + whereClause + " " +
+        "WHERE m.user_id = ? AND (m.title LIKE ? OR m.content LIKE ?) " +
         "ORDER BY m.is_important DESC, m.created_at DESC";
 
     pstmt = con.prepareStatement(sql);
     pstmt.setInt(1, userId);
 
     String keywordPattern = "%" + keyword + "%";
-    if (searchType.equals("title") || searchType.equals("content")) {
-      pstmt.setString(2, keywordPattern);
-    } else {
-      // 제목과 내용 모두 검색
-      pstmt.setString(2, keywordPattern);
-      pstmt.setString(3, keywordPattern);
-    }
+    pstmt.setString(2, keywordPattern);
+    pstmt.setString(3, keywordPattern);
 
     rs = pstmt.executeQuery();
     while (rs.next()) {

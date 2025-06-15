@@ -4,15 +4,7 @@
 <%
     // 카테고리 기본값 설정
     String categoryIdParam = request.getParameter("categoryId");
-    int selectedCategoryId = 0;
-
-    if (categoryIdParam != null && !categoryIdParam.isEmpty()) {
-        try {
-            selectedCategoryId = Integer.parseInt(categoryIdParam);
-        } catch (NumberFormatException e) {
-            // 숫자 형식이 아닌 경우 무시
-        }
-    }
+    int selectedCategoryId = Integer.parseInt(categoryIdParam);
 
     // 카테고리 목록 가져오기
     List<Category> categories = null;
@@ -38,101 +30,7 @@
     <title>새 메모 등록</title>
     <link rel="stylesheet" href="css/common/styles.css">
     <link rel="stylesheet" href="css/common/memo-form.css">
-    <style>
-      .memo-form-container {
-        max-width: 800px;
-        margin: 50px auto;
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
-
-      .form-title {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #333;
-      }
-
-      .form-group {
-        margin-bottom: 15px;
-      }
-
-      .form-group label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-      }
-
-      .form-group input[type="text"],
-      .form-group textarea,
-      .form-group select {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 16px;
-      }
-
-      .form-group textarea {
-        height: 150px;
-        resize: vertical;
-      }
-
-      .color-options {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-      }
-
-      .color-option {
-        display: flex;
-        align-items: center;
-        margin-right: 10px;
-      }
-
-      .color-preview {
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        margin-right: 5px;
-        border: 1px solid #ddd;
-      }
-
-      .color-preview.yellow {
-        background-color: #fff9c4;
-      }
-
-      .color-preview.green {
-        background-color: #e8f5e9;
-      }
-
-      .color-preview.blue {
-        background-color: #e3f2fd;
-      }
-
-      .color-preview.pink {
-        background-color: #fce4ec;
-      }
-
-      .color-preview.purple {
-        background-color: #f3e5f5;
-      }
-
-      .color-preview.orange {
-        background-color: #fff3e0;
-      }
-
-      .button-group {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 20px;
-      }
-
-      .important-toggle {
-        margin-right: 10px;
-      }
-    </style>
+    <link rel="stylesheet" href="css/pages/memo-form.css">
 </head>
 <body>
 <div class="memo-form-container">
@@ -175,39 +73,10 @@
         </div>
 
         <div class="form-group">
-            <label>배경색</label>
-            <div class="color-options">
-                <label class="color-option">
-                    <input type="radio" name="backgroundColor" value="yellow" checked>
-                    <span class="color-preview yellow"></span>
-                    <span>노랑</span>
-                </label>
-                <label class="color-option">
-                    <input type="radio" name="backgroundColor" value="green">
-                    <span class="color-preview green"></span>
-                    <span>초록</span>
-                </label>
-                <label class="color-option">
-                    <input type="radio" name="backgroundColor" value="blue">
-                    <span class="color-preview blue"></span>
-                    <span>파랑</span>
-                </label>
-                <label class="color-option">
-                    <input type="radio" name="backgroundColor" value="pink">
-                    <span class="color-preview pink"></span>
-                    <span>분홍</span>
-                </label>
-                <label class="color-option">
-                    <input type="radio" name="backgroundColor" value="purple">
-                    <span class="color-preview purple"></span>
-                    <span>보라</span>
-                </label>
-                <label class="color-option">
-                    <input type="radio" name="backgroundColor" value="orange">
-                    <span class="color-preview orange"></span>
-                    <span>주황</span>
-                </label>
-            </div>
+            <label for="backgroundColor">배경색</label>
+            <input type="color" id="backgroundColor" name="backgroundColor" value="#fff9c4"
+                   class="color-picker">
+            <p class="color-help">원하는 색상을 선택하세요.</p>
         </div>
 
         <div class="form-group">
@@ -224,4 +93,3 @@
 </div>
 </body>
 </html>
-

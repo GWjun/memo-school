@@ -1,10 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ include file="session-check.jsp" %>
+<%@ include file="session-check.jsp" %> <%-- 인증 로직 --%>
 <%@ page import="src.bean.Category, src.db.CategoryDB" %>
 <%
     request.setCharacterEncoding("UTF-8");
-
-    // 기본 변수 설정
+    
     String action = request.getParameter("action");
     String resultMessage = "";
     boolean showResult = true; // 결과 페이지 표시 여부
@@ -85,7 +84,7 @@
 
         categoryDB.close();
     } catch (Exception e) {
-        e.printStackTrace();
+        out.print(e);
         resultMessage = "오류가 발생했습니다: " + e.getMessage();
     }
 
