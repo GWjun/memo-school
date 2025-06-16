@@ -5,7 +5,15 @@
 <%
     // 카테고리 기본값 설정
     String categoryIdParam = request.getParameter("categoryId");
-    int selectedCategoryId = Integer.parseInt(categoryIdParam);
+    int selectedCategoryId = 0;
+
+    if (categoryIdParam != null && !categoryIdParam.isEmpty()) {
+        try {
+            selectedCategoryId = Integer.parseInt(categoryIdParam);
+        } catch (NumberFormatException e) {
+            // 무시
+        }
+    }
 
     // 카테고리 목록 가져오기
     List<Category> categories = null;
